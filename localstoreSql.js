@@ -6,7 +6,7 @@ const sqlDeleteBtn = document.querySelector('#sqlDeleteBtn');
 sqlSaveBtn.addEventListener('click', function (e) {
   e.preventDefault();
   const SQLValue = window.editor.getValue();
-  const queryName = prompt('Please enter a name for this query');
+  const queryName = prompt('Giv din forespørgsel et navn');
   if (queryName) {
     localStorage.setItem(queryName, SQLValue);
     //console.log('savebtn clicked,name: ' + queryName + ' value: ' + SQLValue);
@@ -21,7 +21,7 @@ sqlDeleteBtn.addEventListener('click', function (e) {
   if (selected !== '0') {
     const key= localstoreSelect.options[localstoreSelect.selectedIndex].text;
     localStorage.removeItem(key);
-    console.log('denne key er fjernet: ' + key);
+    //console.log('denne key er fjernet: ' + key);
     sqlDeleteBtn.classList.add('d-none');
   }
   populateSQLSelect();
