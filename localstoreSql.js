@@ -8,7 +8,7 @@ sqlSaveBtn.addEventListener('click', function (e) {
   const SQLValue = window.editor.getValue();
   const queryName = prompt('Giv din forespørgsel et navn');
   if (queryName) {
-    localStorage.setItem(queryName, SQLValue);
+    localStorage.setItem('sqleditor_'+ queryName, SQLValue);
     //console.log('savebtn clicked,name: ' + queryName + ' value: ' + SQLValue);
   }
   populateSQLSelect();
@@ -20,7 +20,7 @@ sqlDeleteBtn.addEventListener('click', function (e) {
   const selected = localstoreSelect.value;
   if (selected !== '0') {
     const key= localstoreSelect.options[localstoreSelect.selectedIndex].text;
-    localStorage.removeItem(key);
+    localStorage.removeItem('sqleditor_'+key);
     //console.log('denne key er fjernet: ' + key);
     sqlDeleteBtn.classList.add('d-none');
   }
@@ -45,7 +45,10 @@ function populateSQLSelect() {
   const items = { ...localStorage };
   
   const options = Object.keys(items).map(function (key) {
-    return `<option value="${items[key]}">${key}</option>`;
+    if(key.indexOf('sqleditor_') !== -1) {
+    const onlyKey = key.replace('sqleditor_', '');
+    return `<option value="${items[key]}">${onlyKey}</option>`;
+    }
   });
   localstoreSelect.innerHTML = '<option value="0">Vælg gemt forespørgsel</option>' + options.join('');
 }
