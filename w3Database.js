@@ -60,6 +60,9 @@ function w3WebSQLInit() {
         return false;
     }
     this.w3ExecuteSQL = function(sql) {
+        //reset select localstore sql and hide deletebtn
+        sqlDeleteBtn.classList.add('d-none');
+        populateSQLSelect();
         var resultContainer;
         resultContainer = document.getElementById("divResultSQL");
         resultContainer.innerHTML = "";
@@ -71,7 +74,7 @@ function w3WebSQLInit() {
                         if (len > 0) {
                             txt = "";
                             txt = txt + "<div style='padding:10px;'><div style='margin-bottom:10px;'>Number of Records: " + len + "</div>";
-                            txt = txt + "<table class='ws-table-all notranslate'><tr>";
+                            txt = txt + "<table class='table table-striped ws-table-all notranslate'><tr>";
                             for (m in results.rows.item(0)) {
                                 columns.push(m);
                             }
