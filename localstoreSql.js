@@ -74,6 +74,15 @@ function UrlEncode(url) {
   return encodeURIComponent(url).replace(/%20/g, '+');
 }
 
+function getDirectLinkToThisUrl() {
+  const location = window.location.href;
+  const url = location.split('?')[0];
+  const sql = window.editor.getValue();
+  const encodedSql = UrlEncode(sql);
+  const newUrl = url.replace(/\?.*/, '') + '?sql=' + encodedSql;
+  return newUrl;
+}
+
 //is page loaded in iframe
 function isIframe() {
   try {
@@ -81,6 +90,13 @@ function isIframe() {
   } catch (e) {
     return true;
   }
+}
+
+function exportDbToLog() {
+  websqldump.export({
+    database: 'W3SchoolsDemoDatabase',
+    linebreaks: true
+  });
 }
 //console.log('Iframe:'+isIframe());
 
