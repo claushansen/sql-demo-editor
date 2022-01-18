@@ -6,9 +6,10 @@ const sqlDeleteBtn = document.querySelector('#sqlDeleteBtn');
 sqlSaveBtn.addEventListener('click', function (e) {
   e.preventDefault();
   const SQLValue = window.editor.getValue();
+  const singleQuoteValue = SQLValue.replace(/"/g, "'");
   const queryName = prompt('Giv din forespørgsel et navn');
   if (queryName) {
-    localStorage.setItem('sqleditor_'+ queryName, SQLValue);
+    localStorage.setItem('sqleditor_'+ queryName, singleQuoteValue);
     //console.log('savebtn clicked,name: ' + queryName + ' value: ' + SQLValue);
   }
   populateSQLSelect();
