@@ -53,4 +53,36 @@ function populateSQLSelect() {
   });
   localstoreSelect.innerHTML = '<option value="0">Vælg gemt forespørgsel</option>' + options.join('');
 }
+
+//Load sql from search params
+function loadSqlFromUrlParams() {
+    const urlParams = new URLSearchParams(location.search);
+    const sql = urlParams.get('sql');
+  if (sql) {
+    const decodedSql = UrlDecode(sql);
+    window.editor.setValue(decodedSql);
+  }
+}
+
+//decode URL encoded string
+function UrlDecode(url) {
+  return decodeURIComponent(url.replace(/\+/g, ' '));
+}
+
+//encoded URL string
+function UrlEncode(url) {
+  return encodeURIComponent(url).replace(/%20/g, '+');
+}
+
+//is page loaded in iframe
+function isIframe() {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
+}
+//console.log('Iframe:'+isIframe());
+
 populateSQLSelect();
+loadSqlFromUrlParams();
