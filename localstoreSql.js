@@ -94,7 +94,7 @@ function isIframe() {
 
 function exportDbToLog() {
   websqldump.export({
-    database: 'W3SchoolsDemoDatabase',
+    database: 'zbcSchoolsDemoDatabase',
     linebreaks: true
   });
 }

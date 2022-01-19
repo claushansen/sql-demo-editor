@@ -1,11 +1,11 @@
-var w3Database;
+var zbcDatabase;
 
-function w3WebSQLInit() {
-    var w3DBObj = this;
-    w3Database = window.openDatabase('W3SchoolsDemoDatabase', '1.0', 'W3SchoolsDemoDatabase', 2 * 1024 * 1024);
-    function w3DropTable(tablename) {
+function zbcWebSQLInit() {
+    var zbcDBObj = this;
+    zbcDatabase = window.openDatabase('zbcSchoolsDemoDatabase', '1.0', 'zbcSchoolsDemoDatabase', 2 * 1024 * 1024);
+    function zbcDropTable(tablename) {
         var sql="DROP TABLE [" + tablename + "]";
-        w3Database.transaction(function (tx)
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql(sql,[]);
             }
@@ -15,9 +15,9 @@ function w3WebSQLInit() {
     
         );
     }
-    function w3DropView(tablename) {
+    function zbcDropView(tablename) {
         var sql="DROP VIEW [" + tablename + "]";
-        w3Database.transaction(function (tx)
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql(sql,[]);
             }
@@ -26,9 +26,9 @@ function w3WebSQLInit() {
             }
         );
     }
-    function w3DropIndex(tablename) {
+    function zbcDropIndex(tablename) {
         var sql="DROP INDEX [" + tablename + "]";
-        w3Database.transaction(function (tx)
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql(sql,[]);
             }
@@ -59,14 +59,14 @@ function w3WebSQLInit() {
         }
         return false;
     }
-    this.w3ExecuteSQL = function(sql) {
+    this.zbcExecuteSQL = function(sql) {
         //reset select localstore sql and hide deletebtn
         sqlDeleteBtn.classList.add('d-none');
         populateSQLSelect();
         var resultContainer;
         resultContainer = document.getElementById("divResultSQL");
         resultContainer.innerHTML = "";
-        w3Database.transaction(function (tx)
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql(sql,[],function (tx, results)
                     {
@@ -105,7 +105,7 @@ function w3WebSQLInit() {
                                 resultContainer.innerHTML = txt;
                             }
                         }
-                        w3DBObj.myDatabase();
+                        zbcDBObj.myDatabase();
                     }
                 );
             }
@@ -120,16 +120,16 @@ function w3WebSQLInit() {
         if (window.editor) {
           window.editor.getDoc().setValue(sql);
         }
-        w3DBObj.w3ExecuteSQL(sql);
+        zbcDBObj.zbcExecuteSQL(sql);
     };
     this.myDatabase = function () {
-        w3Database.transaction(function (tx)
+        zbcDatabase.transaction(function (tx)
             {
                 var tblnames = [], recordcounts = [], viewnames = [], viewrecordcounts = [], indexnames = [];
                 document.getElementById("yourDB").innerHTML = "";
                 document.getElementById("yourRC").innerHTML = "";
                 document.getElementById("yourIX").innerHTML = "";                
-                function w3DBInfo() {
+                function zbcDBInfo() {
                     var txt = "", i;
                     txt = txt + "<table width='100%' xclass='ws-table-all notranslate'><tr>";
                     txt = txt + "<th style='text-align:left;'>Tablename</th>";  
@@ -137,13 +137,13 @@ function w3WebSQLInit() {
                     txt = txt + "</tr>";
                     for (i = 0; i < tblnames.length; i++) {
                         txt = txt + "<tr>";       
-                        txt = txt + "<td title='Click to see the content of the " + tblnames[i] + " table' style='text-align:left;cursor:pointer;text-decoration:underline;' onclick='w3schoolsWebSQL1.selectStar(\"" + tblnames[i] + "\")'>" + tblnames[i] + "</td>";  
+                        txt = txt + "<td title='Click to see the content of the " + tblnames[i] + " table' style='text-align:left;cursor:pointer;text-decoration:underline;' onclick='zbcSchoolsWebSQL.selectStar(\"" + tblnames[i] + "\")'>" + tblnames[i] + "</td>";  
                         txt = txt + "<td style='text-align:right;'>" + recordcounts[i] + "</td>";                  
                         txt = txt + "</tr>";       
                     }
                     document.getElementById("yourDB").innerHTML =  txt + "</table>";
                 }
-                function w3DBViewInfo() {
+                function zbcDBViewInfo() {
                     var txt = "", i;
                     txt = txt + "<h4>Views:</h4>";
                     txt = txt + "<table width='100%' xclass='ws-table-all notranslate'><tr>";
@@ -152,13 +152,13 @@ function w3WebSQLInit() {
                     txt = txt + "</tr>";
                     for (i = 0; i < viewnames.length; i++) {
                         txt = txt + "<tr>";       
-                        txt = txt + "<td title='Click to see the content of the " + viewnames[i] + " view' style='text-align:left;cursor:pointer;text-decoration:underline;' onclick='w3schoolsWebSQL1.selectStar(\"" + viewnames[i] + "\")'>" + viewnames[i] + "</td>";  
+                        txt = txt + "<td title='Click to see the content of the " + viewnames[i] + " view' style='text-align:left;cursor:pointer;text-decoration:underline;' onclick='zbcSchoolsWebSQL.selectStar(\"" + viewnames[i] + "\")'>" + viewnames[i] + "</td>";  
                         txt = txt + "<td style='text-align:right;'>" + viewrecordcounts[i] + "</td>";                  
                         txt = txt + "</tr>";       
                     }
                     document.getElementById("yourRC").innerHTML =  txt + "</table>";
                 }
-                function w3DBIndexInfo() {
+                function zbcDBIndexInfo() {
                     var txt = "", i;
                     txt = txt + "<h4>Indexes:</h4>";
                     txt = txt + "<table width='100%' xclass='ws-table-all notranslate'><tr>";
@@ -184,7 +184,7 @@ function w3WebSQLInit() {
                                         cc = results.rows.item(k).i;
                                     }
                                     if (cc === "true") {
-                                        w3DBInfo();
+                                        zbcDBInfo();
                                     }
                                 } else {
                                     window.alert("ERROR 4");
@@ -207,7 +207,7 @@ function w3WebSQLInit() {
                                         cc = results.rows.item(k).i;
                                     }
                                     if (cc === "true") {
-                                        w3DBViewInfo();
+                                        zbcDBViewInfo();
                                     }
                                 } else {
                                     window.alert("ERROR 5");
@@ -246,7 +246,7 @@ function w3WebSQLInit() {
                             for (i = 0; i < len; i++) {
                                 indexnames.push(results.rows.item(i).name);
                             }
-                            w3DBIndexInfo();
+                            zbcDBIndexInfo();
                         }
                     }
                 );
@@ -256,31 +256,31 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitDatabase = function(n) {
-        w3DBObj.w3InitCustomers();
-        w3DBObj.w3InitCategories();
-        w3DBObj.w3InitEmployees();
-        w3DBObj.w3InitOrderDetails();    
-        w3DBObj.w3InitOrders();        
-        w3DBObj.w3InitProducts();            
-        w3DBObj.w3InitShippers();                
-        w3DBObj.w3InitSuppliers(n);    
+    this.zbcInitDatabase = function(n) {
+        zbcDBObj.initCustomers();
+        zbcDBObj.initCategories();
+        zbcDBObj.initEmployees();
+        zbcDBObj.initOrderDetails();    
+        zbcDBObj.initOrders();        
+        zbcDBObj.initProducts();            
+        zbcDBObj.initShippers();                
+        zbcDBObj.initSuppliers(n);    
     };
-    this.w3ClearDatabase = function() {
+    this.clearDatabase = function() {
         var warn = window.confirm("Denne handling vil genskabe databasen til sit originale indhold.\n\nEr du sikker på at du vil fortsætte?");
         if (warn === false) {
             return false;
         }
         document.getElementById("divResultSQL").innerHTML =  "";
-        if (w3Database) {
-            w3Database.transaction(function (tx)
+        if (zbcDatabase) {
+            zbcDatabase.transaction(function (tx)
                 {
                     tx.executeSql("SELECT name FROM sqlite_master WHERE type='index' AND name<>'sqlite_autoindex___WebKitDatabaseInfoTable___1'",[],function (tx, results)
                         {
                             var len = results.rows.length, i;
                             if (len>0) {
                                 for (i = 0; i < len; i++) {
-                                    w3DropIndex(results.rows.item(i).name);
+                                    zbcDropIndex(results.rows.item(i).name);
                                 }
                             }
                         }
@@ -290,7 +290,7 @@ function w3WebSQLInit() {
                             var len = results.rows.length, i;
                             if (len>0) {
                                 for (i = 0; i < len; i++) {
-                                    w3DropView(results.rows.item(i).name);
+                                    zbcDropView(results.rows.item(i).name);
                                 }
                             }
                         }
@@ -300,11 +300,11 @@ function w3WebSQLInit() {
                             var len = results.rows.length, i;
                             if (len>0) {
                                 for (i = 0; i < len; i++) {
-                                    w3DropTable(results.rows.item(i).name);
-                                    if (i === (len - 1)) { w3DBObj.w3InitDatabase(1); }
+                                    zbcDropTable(results.rows.item(i).name);
+                                    if (i === (len - 1)) { zbcDBObj.zbcInitDatabase(1); }
                                 }
                             } else {
-                                w3DBObj.w3InitDatabase(1);
+                                zbcDBObj.zbcInitDatabase(1);
                             }
                         }
                     );
@@ -315,8 +315,8 @@ function w3WebSQLInit() {
             );
         }
     };
-    this.w3InitCategories = function() {
-        w3Database.transaction(function (tx)
+    this.initCategories = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Categories (CategoryID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,CategoryName NVARCHAR(255),Description NVARCHAR(255))',[], function(tx)
                     {
@@ -338,8 +338,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitCustomers = function() {
-        w3Database.transaction(function (tx)
+    this.initCustomers = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Customers (CustomerID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,CustomerName NVARCHAR(255),ContactName NVARCHAR(255),Address NVARCHAR(255),City NVARCHAR(255),PostalCode NVARCHAR(255),Country NVARCHAR(255))',[], function(tx)
                     {
@@ -444,8 +444,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitEmployees = function() {
-        w3Database.transaction(function (tx)
+    this.initEmployees = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Employees (EmployeeID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,LastName NVARCHAR(255),FirstName NVARCHAR(255),BirthDate DATE,Photo NVARCHAR(255),Notes MEMO)',[], function(tx)
                     {
@@ -469,8 +469,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitOrderDetails = function() {
-        w3Database.transaction(function (tx)
+    this.initOrderDetails = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE OrderDetails (OrderDetailID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,OrderID INT,ProductID INT,Quantity INT)',[], function(tx)
                     {
@@ -1002,8 +1002,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitOrders = function() {
-        w3Database.transaction(function (tx)
+    this.initOrders = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Orders (OrderID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,CustomerID INT,EmployeeID INT,OrderDate DATE,ShipperID INT)',[], function(tx)
                     {
@@ -1213,8 +1213,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitProducts = function() {
-        w3Database.transaction(function (tx)
+    this.initProducts = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Products (ProductID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,ProductName NVARCHAR(255),SupplierID INT,CategoryID INT,Unit NVARCHAR(255),Price MONEY)',[], function(tx)
                     {
@@ -1305,8 +1305,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitShippers = function() {
-        w3Database.transaction(function (tx)
+    this.initShippers = function() {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Shippers (ShipperID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,ShipperName NVARCHAR(255),Phone NVARCHAR(255))',[], function(tx)
                     {
@@ -1323,8 +1323,8 @@ function w3WebSQLInit() {
             }
         );
     };
-    this.w3InitSuppliers = function(n) {
-        w3Database.transaction(function (tx)
+    this.initSuppliers = function(n) {
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql('CREATE TABLE Suppliers (SupplierID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,SupplierName NVARCHAR(255),ContactName NVARCHAR(255),Address NVARCHAR(255),City NVARCHAR(255),PostalCode NVARCHAR(255),Country NVARCHAR(255),Phone NVARCHAR(255))',[], function(tx)
                     {
@@ -1360,11 +1360,11 @@ function w3WebSQLInit() {
                             {
                                 var sql = document.getElementById("textareaCodeSQL").value;
                                 if (n === 0) {
-                                    w3DBObj.w3ExecuteSQL(sql);
+                                    zbcDBObj.zbcExecuteSQL(sql);
                                 } else {
                                     document.getElementById("divResultSQL").innerHTML = "<div style='margin:10px;'>The database is fully restored.</div>";
                                 }
-                                w3DBObj.myDatabase();
+                                zbcDBObj.myDatabase();
                             }
                         ); 
                     }
@@ -1378,17 +1378,17 @@ function w3WebSQLInit() {
         );
     };
     this.runSQL = function(n) {
-        w3Database.transaction(function (tx)
+        zbcDatabase.transaction(function (tx)
             {
                 tx.executeSql("SELECT * FROM sqlite_sequence",[],function ()
                     {
                     var sql = document.getElementById("textareaCodeSQL").value;
-                    w3DBObj.w3ExecuteSQL(sql);
+                    zbcDBObj.zbcExecuteSQL(sql);
                     }
                 );
             }
             ,function (err) {
-                w3DBObj.w3InitDatabase(0);
+                zbcDBObj.zbcInitDatabase(0);
             }
         );
     };
