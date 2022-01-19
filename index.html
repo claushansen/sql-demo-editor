@@ -20,29 +20,6 @@
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-
-
-  <script>
-    if (window.addEventListener) {
-      window.addEventListener("resize", browserResize);
-    } else if (window.attachEvent) {
-      window.attachEvent("onresize", browserResize);
-    }
-    var xbeforeResize = window.innerWidth;
-
-    function browserResize() {
-      var afterResize = window.innerWidth;
-      if ((xbeforeResize < (970) && afterResize >= (970)) || (xbeforeResize >= (970) && afterResize < (970)) ||
-        (xbeforeResize < (728) && afterResize >= (728)) || (xbeforeResize >= (728) && afterResize < (728)) ||
-        (xbeforeResize < (468) && afterResize >= (468)) || (xbeforeResize >= (468) && afterResize < (468))) {
-        xbeforeResize = afterResize;
-
-
-
-      }
-    }
-  </script>
   <style>
     #tryitLeaderboard {
       margin-top: 5px;
