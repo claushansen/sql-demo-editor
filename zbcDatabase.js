@@ -255,6 +255,23 @@ function zbcWebSQLInit() {
         zbcDBObj.initShippers();
         zbcDBObj.initSuppliers(n);
     };
+    //import from sql-file-text
+    this.zbcImportFromFile = function (fileText) {
+        var contents = fileText, sql = "", sqlArray = [], i, len, txt = "";
+        sql = contents.replace(/\n/g, " ");
+        sqlArray = sql.split(";");
+        len = sqlArray.length;
+        zbcDatabase.transaction(function (tx) {
+            for (i = 0; i < len - 1; i++) {
+                console.log(sqlArray[i]);
+                tx.executeSql(sqlArray[i]);
+            }
+        }
+            , function (err) {                
+                    window.alert("Import Error: " + err.message);                
+            }
+        );        
+    };    
     this.clearDatabase = function () {
         var warn = window.confirm("Denne handling vil slette alt indhold i databasen.\n\nEr du sikker på at du vil fortsætte?");
         if (warn === false) {
