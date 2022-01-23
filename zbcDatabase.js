@@ -256,28 +256,40 @@ function zbcWebSQLInit() {
         zbcDBObj.initSuppliers(n);
     };
     //import from sql-file-text
-    this.zbcImportFromFile = function (fileText) {
+    this.zbcImportFromFile = function (fileText,callback) {
+        if(callback===undefined){
+            callback=function(){
+                console.log("importFromFile ran successfully");
+            };
+        }
         var contents = fileText, sql = "", sqlArray = [], i, len, txt = "";
         sql = contents.replace(/\n/g, " ");
         sqlArray = sql.split(";");
         len = sqlArray.length;
         zbcDatabase.transaction(function (tx) {
             for (i = 0; i < len - 1; i++) {
-                console.log(sqlArray[i]);
+                //console.log(sqlArray[i]);
                 tx.executeSql(sqlArray[i]);
             }
         }
             , function (err) {                
                     window.alert("Import Error: " + err.message);                
-            }
+            }, function () {
+                callback();  
+          }
         );        
     };    
-    this.clearDatabase = function () {
-        var warn = window.confirm("Denne handling vil slette alt indhold i databasen.\n\nEr du sikker på at du vil fortsætte?");
-        if (warn === false) {
-            return false;
+    this.clearDatabase = function (callback) {
+        if(callback === undefined) {
+            callback = function () {
+                console.log("clearDatabase ran successfully");
+            };
         }
-        document.getElementById("divResultSQL").innerHTML = "";
+        // var warn = window.confirm("Denne handling vil slette alt indhold i databasen.\n\nEr du sikker på at du vil fortsætte?");
+        // if (warn === false) {
+        //     return false;
+        // }
+        // document.getElementById("divResultSQL").innerHTML = "";
         if (zbcDatabase) {
             zbcDatabase.transaction(function (tx) {
                 tx.executeSql("SELECT name FROM sqlite_master WHERE type='index' AND name<>'sqlite_autoindex___WebKitDatabaseInfoTable___1'", [], function (tx, results) {
@@ -313,6 +325,8 @@ function zbcWebSQLInit() {
             }
                 , function (err) {
                     window.alert("Error 2: " + err.message);
+                }, function () {
+                  callback();  
                 }
             );
         }

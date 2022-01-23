@@ -150,6 +150,7 @@ $('#LinkModal').on('show.bs.modal', function (event) {
   var actionbtn = modal.find('#modalActionBtn');
   var modalBodyContent = '';
   switch(datalink) {
+    //Link button
     case 'link':
       modal.find('.modal-title').text('Få et direkte link til denne forspørgsel')
       modalBodyContent = `<p>Du kan her få et direkte link til denne forespørsel, samt evt. skrive en kort instruktion, som vises når siden åbnes, ved klik på linket:</p>
@@ -175,48 +176,52 @@ $('#LinkModal').on('show.bs.modal', function (event) {
         copyToClipboard(directLinkInput.val());
       });
       break;
+    //import SQL Button
     case 'import':
-        modal.find('.modal-title').text('Importer data fra en SQL fil');
-        modalBodyContent = `<p>Du kan her importere data fra en SQL fil, som du kan hente fra en anden server, eller som du har gemt tidligere:</p>
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" id="sqlFileInput" accept=".sql">
-          <label class="custom-file-label" for="sqlFileInput">Vælg SQL fil...</label>
-          <div class="invalid-feedback">Vælg en fil.</div>
-        </div>`;
-        modal.find('.modal-body').html(modalBodyContent);
-        const sqlFileInput = modal.find('#sqlFileInput');
-        sqlFileInput.on('change', function() {
-          if(sqlFileInput.val().length > 0) {
-            modal.find('.invalid-feedback').hide();
-            const file = sqlFileInput[0].files[0];
-            let extension = file.name.split(".").pop();
-            if(extension !== 'sql') {
-              modal.find('.invalid-feedback').text('Vælg en .sql fil.');
-              modal.find('.invalid-feedback').show();
-            } else {
-              console.log(file);
-              modal.find('.custom-file-label').text(file.name);
-              
-            }
-          }
-        });
-        actionbtn.text('Importer Data');
-        actionbtn.on('click', function () {
+      actionbtn.attr('disabled', true);
+      modal.find('.modal-title').text('Importer data fra en SQL fil');
+      modalBodyContent = `<p>Du kan her importere data fra en SQL fil, som du kan hente fra en anden server, eller som du har gemt tidligere:</p>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="sqlFileInput" accept=".sql">
+        <label class="custom-file-label" for="sqlFileInput">Vælg SQL fil...</label>
+        <div class="invalid-feedback">Vælg en fil.</div>
+      </div>`;
+      modal.find('.modal-body').html(modalBodyContent);
+      const sqlFileInput = modal.find('#sqlFileInput');
+      sqlFileInput.on('change', function() {
+        if(sqlFileInput.val().length > 0) {
+          modal.find('.invalid-feedback').hide();
           const file = sqlFileInput[0].files[0];
           let extension = file.name.split(".").pop();
-          if(extension == 'sql') {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-              const contents = e.target.result;
-              //const queries = contents.split(';\n');
-              
-              
-              //window.editor.setValue(contents);
-            };
-            reader.readAsText(file);
-
-            
-            modal.modal('hide');
+          if(extension !== 'sql') {
+            modal.find('.invalid-feedback').text('Vælg en .sql fil.');
+            modal.find('.invalid-feedback').show();
+          } else {
+            console.log(file);
+            modal.find('.custom-file-label').text(file.name);
+            actionbtn.attr('disabled', false); 
+          }
+        }
+      });
+      actionbtn.text('Importer Data');
+      actionbtn.on('click', function () {
+        const file = sqlFileInput[0].files[0];
+        let extension = file.name.split(".").pop();
+        if(extension == 'sql') {
+          var tempDataObject = new zbcWebSQLInit();
+          const reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = function(e) {
+            const contents = e.target.result;
+            let replacedContent = contents.replace(/&amp;/g, '&');
+            tempDataObject.clearDatabase(function() {
+              tempDataObject.zbcImportFromFile(replacedContent, function() {
+                $('#divResultSQL').html("<div style='padding:10px;'>Data er importeret fra filen: " + file.name + "</div>");
+                });
+              tempDataObject.myDatabase();
+            });                     
+          };
+          modal.modal('hide');
           }
         });
       break;
@@ -236,5 +241,7 @@ $('#LinkModal').on('hidden.bs.modal', function (e) {
   modal.find('.modal-title').text('');
   modal.find('.modal-body').text('');
   modal.find('.modal-body').css('white-space', 'initial');
+  modal.find('#modalActionBtn').text('');
+  modal.find('#modalActionBtn').off();
   // do something...
 })
