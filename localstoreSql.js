@@ -225,6 +225,55 @@ $('#LinkModal').on('show.bs.modal', function (event) {
           }
         });
       break;
+      //Download SQL Button
+      case 'download-sql' :
+      modal.find('.modal-title').text('Eksporter databasen som en SQL fil');
+      modalBodyContent = `<p>Du kan her eksportere databasen som en SQL fil, som du kan indlæse senere:</p>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="exportFormatSelect">Format</label>
+            <select class="form-control" id="exportTableSelect">
+              <option value="all">Hele databasen m. data</option>
+              <option value="all structure">Database struktur u. Data </option>
+              <option value="table">Enkelt Tabel</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="exportFormatSelect">Format</label>
+          <select class="form-control" id="exportTableSelect">
+            <option>SQL</option>
+            <option>CSV</option>
+            <option>XLSX</option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="exportTableSelect">Tabel</label>
+          <select class="form-control" id="exportTableSelect">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+      </div>
+    </div>`;      
+      modal.find('.modal-body').html(modalBodyContent);
+
+      actionbtn.text('Download');
+      actionbtn.on('click', function () {
+        
+         modal.modal('hide');
+          
+       });
 
   }
 
