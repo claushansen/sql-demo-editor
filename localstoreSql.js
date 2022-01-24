@@ -197,7 +197,7 @@ $('#LinkModal').on('show.bs.modal', function (event) {
             modal.find('.invalid-feedback').text('Vælg en .sql fil.');
             modal.find('.invalid-feedback').show();
           } else {
-            console.log(file);
+            //console.log(file);
             modal.find('.custom-file-label').text(file.name);
             actionbtn.attr('disabled', false); 
           }
@@ -243,5 +243,6 @@ $('#LinkModal').on('hidden.bs.modal', function (e) {
   modal.find('.modal-body').css('white-space', 'initial');
   modal.find('#modalActionBtn').text('');
   modal.find('#modalActionBtn').off();
+  modal.find('#modalActionBtn').attr('disabled', false);
   // do something...
 })
