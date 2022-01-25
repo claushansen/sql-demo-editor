@@ -263,7 +263,8 @@ $('#LinkModal').on('show.bs.modal', function (event) {
             tableselectOptions += `<option>${data[i]}</option>`;
           }
           exportTableSelect.html(tableselectOptions);
-      });      
+      });
+            
       let exportTableSelectGroup = modal.find('#exportTableSelectGroup');
       exportWhatSelect.on('change', function() {
         if(exportWhatSelect.val() == 'table') {
@@ -274,50 +275,32 @@ $('#LinkModal').on('show.bs.modal', function (event) {
       });
       actionbtn.text('Download');
       actionbtn.on('click', function () {
-        /*{
-          database: 'NorthwindLite',
-          table: 'Orders',
-          schemaonly: true,
-          linebreaks: true,
-          success: function(sql) {
-            alert(sql); 
-          },
-          error: function(msg) {
-            // do nothing
-          }
-        }*/
+
         let config = {
           database: 'zbcSchoolsDemoDatabase',
           linebreaks: true,
           success: function(sql) {
-            alert(sql); 
+            var filename;
+            if(exportWhatSelect.val() == 'table') {
+              filename = exportTableSelect.val() + '.sql';
+            } else {
+              filename = 'zbcSchoolsDemoDatabase.sql';
+            }
+            var file = new File([sql], filename, {type: "text/plain;charset=utf-8"});
+            saveAs(file);
           },
           error: function(msg) {
             alert(msg);
           }
         };
-        if(exportWhatSelect.val() == 'all') {
-          config.success = function(sql) {
-            console.log(sql);
-          };
-          websqldump.export(config);
-        }
         if(exportWhatSelect.val() == 'table') {
           config.table = exportTableSelect.val();
-          config.success = function(sql) {
-            console.log(sql);
-          };
-          websqldump.export(config);
-        }        
+        }
+        websqldump.export(config);        
         modal.modal('hide');          
       });
-  }
-
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  
-  //modal.find('.modal-title').text('Du har klikket på ' + datalink)
-  //modal.find('.modal-body input').val(recipient)
+      break;
+    }
 })
 
 //menulinks modalcontent on hidden
