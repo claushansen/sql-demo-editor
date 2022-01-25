@@ -144,6 +144,7 @@ showInstructions();
 
 //menulinks modalcontent on show
 $('#LinkModal').on('show.bs.modal', function (event) {
+  var DataObject = new zbcWebSQLInit();
   var menulink = $(event.relatedTarget) // Button that triggered the modal
   var datalink = menulink.data('link') // Extract info from data-* attributes
   var modal = $(this);
@@ -208,17 +209,17 @@ $('#LinkModal').on('show.bs.modal', function (event) {
         const file = sqlFileInput[0].files[0];
         let extension = file.name.split(".").pop();
         if(extension == 'sql') {
-          var tempDataObject = new zbcWebSQLInit();
+          
           const reader = new FileReader();
           reader.readAsText(file);
           reader.onload = function(e) {
             const contents = e.target.result;
             let replacedContent = contents.replace(/&amp;/g, '&');
-            tempDataObject.clearDatabase(function() {
-              tempDataObject.zbcImportFromFile(replacedContent, function() {
+            DataObject.clearDatabase(function() {
+              DataObject.zbcImportFromFile(replacedContent, function() {
                 $('#divResultSQL').html("<div style='padding:10px;'>Data er importeret fra filen: " + file.name + "</div>");
                 });
-              tempDataObject.myDatabase();
+              DataObject.myDatabase();
             });                     
           };
           modal.modal('hide');
@@ -226,50 +227,98 @@ $('#LinkModal').on('show.bs.modal', function (event) {
         });
       break;
       //Download SQL Button
-      case 'download-sql' :
+      case 'export' :
+      
       modal.find('.modal-title').text('Eksporter databasen som en SQL fil');
       modalBodyContent = `<p>Du kan her eksportere databasen som en SQL fil, som du kan indlæse senere:</p>
       <div class="row">
         <div class="col">
           <div class="form-group">
-            <label for="exportFormatSelect">Format</label>
-            <select class="form-control" id="exportTableSelect">
-              <option value="all">Hele databasen m. data</option>
-              <option value="all structure">Database struktur u. Data </option>
+            <label for="exportWhatSelect">Eksporter</label>
+            <select class="form-control" id="exportWhatSelect">
+              <option value="all">Hele databasen</option>
               <option value="table">Enkelt Tabel</option>
             </select>
           </div>
         </div>
       </div>
-      
       <div class="row">
-      <div class="col">
-        <div class="form-group">
-          <label for="exportFormatSelect">Format</label>
-          <select class="form-control" id="exportTableSelect">
-            <option>SQL</option>
-            <option>CSV</option>
-            <option>XLSX</option>
-          </select>
+        <div class="col">
+          <div class="form-group" id="exportTableSelectGroup" style="display:none;">
+            <label for="exportTableSelect">Tabel</label>
+            <select class="form-control" id="exportTableSelect">
+              
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="form-group">
-          <label for="exportTableSelect">Tabel</label>
-          <select class="form-control" id="exportTableSelect">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
-      </div>
-    </div>`;      
+      </div>`; 
+     
+      
+      
+
       modal.find('.modal-body').html(modalBodyContent);
+      let exportWhatSelect = modal.find('#exportWhatSelect');
+      let exportTableSelect = modal.find('#exportTableSelect');
+      // populate the select with the table names
+      var tableselectOptions = '';
+      DataObject.getTableNames(function(data) {
+        //console.log(data);
+        for(var i = 0; i < data.length; i++) {
+            tableselectOptions += `<option>${data[i]}</option>`;
+          }
+          exportTableSelect.html(tableselectOptions);
+      });
+
+
+      
+      
+      let exportTableSelectGroup = modal.find('#exportTableSelectGroup');
+      exportWhatSelect.on('change', function() {
+        if(exportWhatSelect.val() == 'table') {
+          exportTableSelectGroup.show();
+        } else {
+          exportTableSelectGroup.hide();
+        }
+      });
 
       actionbtn.text('Download');
       actionbtn.on('click', function () {
+        /*{
+          database: 'NorthwindLite',
+          table: 'Orders',
+          schemaonly: true,
+          linebreaks: true,
+          success: function(sql) {
+            alert(sql); 
+          },
+          error: function(msg) {
+            // do nothing
+          }
+        }*/
+        var config = {
+          database: 'zbcSchoolsDemoDatabase',
+          linebreaks: true,
+          success: function(sql) {
+            alert(sql); 
+          },
+          error: function(msg) {
+            alert(msg);
+          }
+        };
+        if(exportWhatSelect.val() == 'all') {
+          config.success = function(sql) {
+            console.log(sql);
+          };
+          websqldump.export(config);
+        }
+        if(exportWhatSelect.val() == 'table') {
+          config.table = exportTableSelect.val();
+          config.success = function(sql) {
+            console.log(sql);
+          };
+          websqldump.export(config);
+        }
+
         
          modal.modal('hide');
           
