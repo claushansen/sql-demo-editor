@@ -252,10 +252,6 @@ $('#LinkModal').on('show.bs.modal', function (event) {
           </div>
         </div>
       </div>`; 
-     
-      
-      
-
       modal.find('.modal-body').html(modalBodyContent);
       let exportWhatSelect = modal.find('#exportWhatSelect');
       let exportTableSelect = modal.find('#exportTableSelect');
@@ -267,11 +263,7 @@ $('#LinkModal').on('show.bs.modal', function (event) {
             tableselectOptions += `<option>${data[i]}</option>`;
           }
           exportTableSelect.html(tableselectOptions);
-      });
-
-
-      
-      
+      });      
       let exportTableSelectGroup = modal.find('#exportTableSelectGroup');
       exportWhatSelect.on('change', function() {
         if(exportWhatSelect.val() == 'table') {
@@ -280,7 +272,6 @@ $('#LinkModal').on('show.bs.modal', function (event) {
           exportTableSelectGroup.hide();
         }
       });
-
       actionbtn.text('Download');
       actionbtn.on('click', function () {
         /*{
@@ -295,7 +286,7 @@ $('#LinkModal').on('show.bs.modal', function (event) {
             // do nothing
           }
         }*/
-        var config = {
+        let config = {
           database: 'zbcSchoolsDemoDatabase',
           linebreaks: true,
           success: function(sql) {
@@ -317,13 +308,9 @@ $('#LinkModal').on('show.bs.modal', function (event) {
             console.log(sql);
           };
           websqldump.export(config);
-        }
-
-        
-         modal.modal('hide');
-          
-       });
-
+        }        
+        modal.modal('hide');          
+      });
   }
 
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
