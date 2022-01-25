@@ -245,6 +245,26 @@ function zbcWebSQLInit() {
             }
         );
     };
+    this.getTableNames = function (callback) {
+        var tblnames = [];
+        zbcDatabase.transaction(function (tx) {
+            //console.log(tblnames);
+            tx.executeSql("SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE '__WebKitDatabaseInfoTable__' AND tbl_name NOT LIKE 'sqlite_sequence'", [], function (tx, results) {
+                var len = results.rows.length, i;
+                    if (len > 0) {
+                        for (i = 0; i < len; i++) {
+                            tblnames.push(results.rows.item(i).tbl_name);
+                        }
+                        //return tblnames;
+                    }  
+                }
+            );
+        }, function (err) {
+            window.alert("ERROR 2.5" + err.message);
+        }, function () {
+            callback(tblnames);
+        });
+    };
     this.zbcInitDatabase = function (n) {
         zbcDBObj.initCustomers();
         zbcDBObj.initCategories();
