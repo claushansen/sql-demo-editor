@@ -95,16 +95,17 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" id="navbarLinkMenuLink" href="#" data-toggle="modal" data-target="#LinkModal" data-link="link">Link </a>
+            <a class="nav-link" id="navbarLinkMenuLink" href="#" data-toggle="modal" data-target="#LinkModal"
+              data-link="link">Link </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"data-toggle="modal" data-target="#LinkModal" data-link="info">Info</a>
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#LinkModal" data-link="info">Info</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"data-toggle="modal" data-target="#LinkModal" data-link="import">Import</a>
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#LinkModal" data-link="import">Import</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"data-toggle="modal" data-target="#LinkModal" data-link="export">Eksport</a>
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#LinkModal" data-link="export">Eksport</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDeleteMenuLink" data-toggle="dropdown"
@@ -148,7 +149,7 @@
           <form method="post" target="view" id="tryitform" name="tryitform" onsubmit="validateForm();">
             <div class="row">
               <div class="col-md-5">
-                <h3>SQL Forespørgsel:</h3>
+                <h4>SQL Forespørgsel:</h4>
               </div>
               <div class="col-md-7" id="editornav">
                 <button id="sqlSaveBtn" class="btn btn-primary pull-right btn-sm">
@@ -163,14 +164,23 @@
                 </select>
               </div>
             </div>
-            <textarea id="textareaCodeSQL" wrap="logical">SELECT * FROM Customers;</textarea>
-            <small>Rediger SQL forespørgslen, og klik "kør SQL" for at se resultatet.</small>
-            <input type="hidden" name="code" id="code" />
-            <input type="hidden" id="bt" name="bt" />
+            <div class="row">
+              <div class="col">
+                <textarea id="textareaCodeSQL" wrap="logical">SELECT * FROM Customers;</textarea>
+                <small>Rediger SQL forespørgslen, og klik "kør SQL" for at se resultatet.</small>
+                <input type="hidden" name="code" id="code" />
+                <input type="hidden" id="bt" name="bt" />
+              </div>
+            </div>
           </form>
-          <button class="btn btn-success btn-lg" type="button" onclick="zbcSchoolsSQLSubmit();"><i
-              class="fa fa-cogs"></i> Kør SQL</button>
-          <h3 style=" margin-top: 15px;">Resultat:</h3>
+          <div class="row">
+            <div class="col col-lg-3 mx-auto">
+              <button class="btn btn-success btn-lg btn-block" type="button" onclick="zbcSchoolsSQLSubmit();"><i
+                class="fa fa-cogs"></i> Kør SQL</button>
+            </div>            
+          </div>
+          
+          <h4 style=" margin-top: 15px;">Resultat:</h4>
           <div id="resultSQL">
 
             <div id="divResultSQL">
@@ -267,8 +277,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"></script>
-    <!--Filesaver-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+  <!--Filesaver-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
   <script src="localstoreSql.js"></script>
   <script src="websqldump.js"></script>
 </body>
