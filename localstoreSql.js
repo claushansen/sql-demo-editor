@@ -52,6 +52,11 @@ function populateSQLSelect() {
     }
   });
   localstoreSelect.innerHTML = '<option value="0">Vælg gemt forespørgsel</option>' + options.join('');
+  if(options.length > 0) {
+    localstoreSelect.classList.replace('d-none', 'd-inline');  
+  }else{
+    localstoreSelect.classList.replace('d-inline', 'd-none');
+  }
 }
 
 //Load sql from search params
