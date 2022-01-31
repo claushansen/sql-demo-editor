@@ -52,9 +52,9 @@ function populateSQLSelect() {
     }
   });
   localstoreSelect.innerHTML = '<option value="0">Vælg gemt forespørgsel</option>' + options.join('');
-  if(options.length > 0) {
-    localstoreSelect.classList.replace('d-none', 'd-inline');  
-  }else{
+  if (options.length > 0) {
+    localstoreSelect.classList.replace('d-none', 'd-inline');
+  } else {
     localstoreSelect.classList.replace('d-inline', 'd-none');
   }
 }
@@ -212,24 +212,25 @@ $('#LinkModal').on('show.bs.modal', function (event) {
       actionbtn.text('Importer Data');
       actionbtn.on('click', function () {
         const warn = confirm(' Denne handling vil slette alt i de eksisterende tabeller! Er du sikke på at du vil fortsætte?');
-        if (warn !== false) {
-          const file = sqlFileInput[0].files[0];
-          let extension = file.name.split(".").pop();
-          if (extension == 'sql') {
-            const reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function (e) {
-              const contents = e.target.result;
-              let replacedContent = contents.replace(/&amp;/g, '&');
-              DataObject.clearDatabase(function () {
-                DataObject.zbcImportFromFile(replacedContent, function () {
-                  $('#divResultSQL').html("<div style='padding:10px;'>Data er importeret fra filen: " + file.name + "</div>");
-                });
-                DataObject.myDatabase();
+        if (warn === false) {
+          return false;
+        }
+        const file = sqlFileInput[0].files[0];
+        let extension = file.name.split(".").pop();
+        if (extension == 'sql') {
+          const reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = function (e) {
+            const contents = e.target.result;
+            let replacedContent = contents.replace(/&amp;/g, '&');
+            DataObject.clearDatabase(function () {
+              DataObject.zbcImportFromFile(replacedContent, function () {
+                $('#divResultSQL').html("<div style='padding:10px;'>Data er importeret fra filen: " + file.name + "</div>");
               });
-            };
-            modal.modal('hide');
-          }
+              DataObject.myDatabase();
+            });
+          };
+          modal.modal('hide');
         }
       });
       break;
