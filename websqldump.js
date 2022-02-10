@@ -107,7 +107,7 @@ wd.export = function(config) {
 					var tbl_name; 
 					for (var i = 0; i < results.rows.length; i++) {
 						tbl_name = results.rows.item(i)["tbl_name"];
-						if (tbl_name.indexOf('__WebKit') !== 0) // skip webkit internals
+						if (tbl_name.indexOf('__WebKit') !== 0  && tbl_name.indexOf('sqlite_sequence') !== 0) // skip webkit internals AND sqlite_sequence
 							config.outstanding.push(tbl_name);
 					}
 					// Then export them

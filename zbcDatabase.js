@@ -245,6 +245,26 @@ function zbcWebSQLInit() {
             }
         );
     };
+    this.getTableNames = function (callback) {
+        var tblnames = [];
+        zbcDatabase.transaction(function (tx) {
+            //console.log(tblnames);
+            tx.executeSql("SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE '__WebKitDatabaseInfoTable__' AND tbl_name NOT LIKE 'sqlite_sequence'", [], function (tx, results) {
+                var len = results.rows.length, i;
+                    if (len > 0) {
+                        for (i = 0; i < len; i++) {
+                            tblnames.push(results.rows.item(i).tbl_name);
+                        }
+                        //return tblnames;
+                    }  
+                }
+            );
+        }, function (err) {
+            window.alert("ERROR 2.5" + err.message);
+        }, function () {
+            callback(tblnames);
+        });
+    };
     this.zbcInitDatabase = function (n) {
         zbcDBObj.initCustomers();
         zbcDBObj.initCategories();
@@ -255,12 +275,41 @@ function zbcWebSQLInit() {
         zbcDBObj.initShippers();
         zbcDBObj.initSuppliers(n);
     };
-    this.clearDatabase = function () {
-        var warn = window.confirm("Denne handling vil slette alt indhold i databasen.\n\nEr du sikker på at du vil fortsætte?");
-        if (warn === false) {
-            return false;
+    //import from sql-file-text
+    this.zbcImportFromFile = function (fileText,callback) {
+        if(callback===undefined){
+            callback=function(){
+                console.log("importFromFile ran successfully");
+            };
         }
-        document.getElementById("divResultSQL").innerHTML = "";
+        var contents = fileText, sql = "", sqlArray = [], i, len, txt = "";
+        sql = contents.replace(/\n/g, " ");
+        sqlArray = sql.split(";");
+        len = sqlArray.length;
+        zbcDatabase.transaction(function (tx) {
+            for (i = 0; i < len - 1; i++) {
+                //console.log(sqlArray[i]);
+                tx.executeSql(sqlArray[i]);
+            }
+        }
+            , function (err) {                
+                    window.alert("Import Error: " + err.message);                
+            }, function () {
+                callback();  
+          }
+        );        
+    };    
+    this.clearDatabase = function (callback) {
+        if(callback === undefined) {
+            callback = function () {
+                console.log("clearDatabase ran successfully");
+            };
+        }
+        // var warn = window.confirm("Denne handling vil slette alt indhold i databasen.\n\nEr du sikker på at du vil fortsætte?");
+        // if (warn === false) {
+        //     return false;
+        // }
+        // document.getElementById("divResultSQL").innerHTML = "";
         if (zbcDatabase) {
             zbcDatabase.transaction(function (tx) {
                 tx.executeSql("SELECT name FROM sqlite_master WHERE type='index' AND name<>'sqlite_autoindex___WebKitDatabaseInfoTable___1'", [], function (tx, results) {
@@ -296,6 +345,8 @@ function zbcWebSQLInit() {
             }
                 , function (err) {
                     window.alert("Error 2: " + err.message);
+                }, function () {
+                  callback();  
                 }
             );
         }

@@ -11,8 +11,12 @@
   <script src="codemirror_sql.js"></script>
   <script src="zbcDatabase.js"></script>
   <!-- CSS only -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+
+  <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -81,14 +85,71 @@
 <body>
 
   <div class="container-fluid" style="margin-top: 10px;">
-    <div class="row">
+    <!--navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Demo Websql Editor</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" id="navbarLinkMenuLink" href="#" data-toggle="modal" data-target="#LinkModal"
+              data-link="link">Link </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#LinkModal" data-link="info">Info</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#LinkModal" data-link="import">Import</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#LinkModal" data-link="export">Eksport</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDeleteMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Slet
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDeleteMenuLink">
+              <a class="dropdown-item" onclick="zbcSchoolsWebSQL.clearDatabase()">Slet Databasen</a>
+              <a class="dropdown-item" onclick="zbcSchoolsWebSQL.clearDatabaseAndReload()">Slet Databasen og gendan
+                oprindelig</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!--modals-->
+    <div class="modal fade" id="LinkModal" tabindex="-1" role="dialog" aria-labelledby="LinkModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="LinkModalLabel">New message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="modalCloseBtn" class="btn btn-secondary" data-dismiss="modal">Luk</button>
+            <button type="button" id="modalActionBtn" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Editor-->
+    <div class="row" style="margin-top:15px;">
       <div class="col-md-10">
         <div
-          style="padding:15px;padding-bottom:40px;margin-bottom:40px;background-color:#88c999;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
+          style="padding:15px;padding-bottom:40px;margin-bottom:40px;background-color:#1b91bd;color:#ffffff;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
           <form method="post" target="view" id="tryitform" name="tryitform" onsubmit="validateForm();">
             <div class="row">
               <div class="col-md-5">
-                <h3>SQL Forespørgsel:</h3>
+                <h4>SQL Forespørgsel:</h4>
               </div>
               <div class="col-md-7" id="editornav">
                 <button id="sqlSaveBtn" class="btn btn-primary pull-right btn-sm">
@@ -97,23 +158,32 @@
                 <button id="sqlDeleteBtn" class="btn btn-danger pull-right d-none btn-sm" style="margin-right: 5px">
                   <i class="fa fa-trash"></i><span class="d-none d-sm-inline"></span>
                 </button>
-                <select id="localstoreSelect" class="form-select-sm d-inline w-auto pull-right"
-                  style="margin-right: 5px;" aria-label="Default select example">
+                <select id="localstoreSelect" class="form-control-sm d-inline  pull-right" style="margin-right: 5px;"
+                  aria-label="Default select example">
                   <option value="0" selected>Vælg gemt forespørgsel</option>
                 </select>
               </div>
             </div>
-            <textarea id="textareaCodeSQL" wrap="logical">SELECT * FROM Customers;</textarea>
-            <small>Rediger SQL forespørgslen, og klik "kør SQL" for at se resultatet.</small>
-            <input type="hidden" name="code" id="code" />
-            <input type="hidden" id="bt" name="bt" />
+            <div class="row">
+              <div class="col">
+                <textarea id="textareaCodeSQL" wrap="logical">SELECT * FROM Customers;</textarea>
+                <small>Rediger SQL forespørgslen, og klik "kør SQL" for at se resultatet.</small>
+                <input type="hidden" name="code" id="code" />
+                <input type="hidden" id="bt" name="bt" />
+              </div>
+            </div>
           </form>
-          <button class="btn btn-success btn-lg" type="button" onclick="zbcSchoolsSQLSubmit();"><i
-              class="fa fa-cogs"></i> Kør SQL</button>
-          <h3 style=" margin-top: 15px;">Resultat:</h3>
+          <div class="row">
+            <div class="col col-lg-3 mx-auto">
+              <button class="btn btn-success btn-lg btn-block shadow-sm" type="button" onclick="zbcSchoolsSQLSubmit();"><i
+                class="fa fa-cogs"></i> Kør SQL</button>
+            </div>            
+          </div>
+          
+          <h4 style=" margin-top: 15px;">Resultat:</h4>
           <div id="resultSQL">
 
-            <div id="divResultSQL">
+            <div id="divResultSQL" style="color:#000;">
               <div style="margin:10px;margin-bottom:30px;">Klik <b>"Kør SQL"</b> for at køre din SQL forespørgsel
                 ovenfor.</div>
               <div style="margin:10px;">Denne side har lavet en SQL database i din browser.</div>
@@ -143,10 +213,6 @@
       </div>
     </div>
   </div>
-
-
-
-
 
   <input type="hidden" id="sSupport" value="" />
   <script type="text/javascript">
@@ -190,7 +256,7 @@
       if (schoolsWebSQLOK === true && statementSupport === "") {
 
         zbcSchoolsWebSQL.myDatabase();
-      } 
+      }
     }
 
     function validateForm() {
@@ -203,6 +269,16 @@
     schoolsWriteDBInfo();
 
   </script>
+  <!--Bootstrap js-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"></script>
+  <!--Filesaver-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
   <script src="localstoreSql.js"></script>
   <script src="websqldump.js"></script>
 </body>
