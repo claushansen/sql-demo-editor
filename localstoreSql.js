@@ -9,7 +9,7 @@ sqlSaveBtn.addEventListener('click', function (e) {
   const singleQuoteValue = SQLValue.replace(/"/g, "'");
   const queryName = prompt('Giv din forespørgsel et navn');
   if (queryName) {
-    localStorage.setItem('sqleditor_'+ queryName, singleQuoteValue);
+    localStorage.setItem('sqleditor_' + queryName, singleQuoteValue);
     //console.log('savebtn clicked,name: ' + queryName + ' value: ' + SQLValue);
   }
   populateSQLSelect();
@@ -20,8 +20,8 @@ sqlDeleteBtn.addEventListener('click', function (e) {
   e.preventDefault();
   const selected = localstoreSelect.value;
   if (selected !== '0') {
-    const key= localstoreSelect.options[localstoreSelect.selectedIndex].text;
-    localStorage.removeItem('sqleditor_'+key);
+    const key = localstoreSelect.options[localstoreSelect.selectedIndex].text;
+    localStorage.removeItem('sqleditor_' + key);
     //console.log('denne key er fjernet: ' + key);
     sqlDeleteBtn.classList.add('d-none');
   }
@@ -36,7 +36,7 @@ localstoreSelect.addEventListener('change', function (e) {
     sqlDeleteBtn.classList.remove('d-none');
     window.editor.setValue(selected);
     //console.log('localstoreSelect changed value: ' + selected);
-  }else {
+  } else {
     sqlDeleteBtn.classList.add('d-none');
   }
 });
@@ -44,25 +44,25 @@ localstoreSelect.addEventListener('change', function (e) {
 //Populate SQL Select
 function populateSQLSelect() {
   const items = { ...localStorage };
-  
+
   const options = Object.keys(items).map(function (key) {
-    if(key.indexOf('sqleditor_') !== -1) {
-    const onlyKey = key.replace('sqleditor_', '');
-    return `<option value="${items[key]}">${onlyKey}</option>`;
+    if (key.indexOf('sqleditor_') !== -1) {
+      const onlyKey = key.replace('sqleditor_', '');
+      return `<option value="${items[key]}">${onlyKey}</option>`;
     }
   });
   localstoreSelect.innerHTML = '<option value="0">Vælg gemt forespørgsel</option>' + options.join('');
-  if(options.length > 0) {
-    localstoreSelect.classList.replace('d-none', 'd-inline');  
-  }else{
+  if (options.length > 0) {
+    localstoreSelect.classList.replace('d-none', 'd-inline');
+  } else {
     localstoreSelect.classList.replace('d-inline', 'd-none');
   }
 }
 
 //Load sql from search params
 function loadSqlFromUrlParams() {
-    const urlParams = new URLSearchParams(location.search);
-    const sql = urlParams.get('sql');
+  const urlParams = new URLSearchParams(location.search);
+  const sql = urlParams.get('sql');
   if (sql) {
     const decodedSql = UrlDecode(sql);
     window.editor.setValue(decodedSql);
@@ -77,7 +77,7 @@ function GetInstructionsFromUrlParams() {
   if (instruct && instruct !== '') {
     const decodedInstruct = UrlDecode(instruct);
     return decodedInstruct;
-  } else{
+  } else {
     return false;
   }
 }
@@ -129,17 +129,17 @@ function exportDbToLog() {
 }
 //console.log('Iframe:'+isIframe());
 
-function copyToClipboard(text) { 
-  navigator.clipboard.writeText(text).then(function() {
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function () {
     alert('kopieret til udklipsholderen');
   })
-  .catch(function(err) {
-    console.error('Could not copy text: ', err);
-  });
+    .catch(function (err) {
+      console.error('Could not copy text: ', err);
+    });
 }
 
 
-  
+
 
 populateSQLSelect();
 loadSqlFromUrlParams();
@@ -155,25 +155,25 @@ $('#LinkModal').on('show.bs.modal', function (event) {
   var modal = $(this);
   var actionbtn = modal.find('#modalActionBtn');
   var modalBodyContent = '';
-  switch(datalink) {
+  switch (datalink) {
     //Link button
     case 'link':
       modal.find('.modal-title').text('Få et direkte link til denne forspørgsel')
       modalBodyContent = `<p>Du kan her få et direkte link til denne forespørsel, samt evt. skrive en kort instruktion, som vises når siden åbnes, ved klik på linket:</p>
-      <label for="directLinkInput">Link:</label><a href="${getDirectLinkToThisUrl()+(GetInstructionsFromUrlParams() ? '&instruct=' + UrlEncode(GetInstructionsFromUrlParams()) : '')}" class="pull-right" id="openLinkToTest" target="_blank" title="Test dit link i en ny fane"><i class="fa fa-external-link"></i></a>
-      <input type="text" id="directLinkInput" value="${getDirectLinkToThisUrl()+(GetInstructionsFromUrlParams() ? '&instruct=' + UrlEncode(GetInstructionsFromUrlParams()) : '')}" class="form-control">
+      <label for="directLinkInput">Link:</label><a href="${getDirectLinkToThisUrl() + (GetInstructionsFromUrlParams() ? '&instruct=' + UrlEncode(GetInstructionsFromUrlParams()) : '')}" class="pull-right" id="openLinkToTest" target="_blank" title="Test dit link i en ny fane"><i class="fa fa-external-link"></i></a>
+      <input type="text" id="directLinkInput" value="${getDirectLinkToThisUrl() + (GetInstructionsFromUrlParams() ? '&instruct=' + UrlEncode(GetInstructionsFromUrlParams()) : '')}" class="form-control">
       <label for="instructions">Instruktioner:</label>
       <textarea id="linkInstructions" class="form-control" rows="3">${GetInstructionsFromUrlParams() ? GetInstructionsFromUrlParams() : ''}</textarea>`;
       modal.find('.modal-body').html(modalBodyContent);
       var directLinkInput = modal.find('#directLinkInput');
       var openLinkToTest = modal.find('#openLinkToTest');
       linkInstructions = modal.find('#linkInstructions');
-      linkInstructions.on('input', function() {
-        if(linkInstructions.val().length < 1) {
-          openLinkToTest.attr('href',getDirectLinkToThisUrl());
+      linkInstructions.on('input', function () {
+        if (linkInstructions.val().length < 1) {
+          openLinkToTest.attr('href', getDirectLinkToThisUrl());
           directLinkInput.val(getDirectLinkToThisUrl());
-        }else {
-          openLinkToTest.attr('href',getDirectLinkToThisUrl() + '&instruct=' + UrlEncode(linkInstructions.val()));
+        } else {
+          openLinkToTest.attr('href', getDirectLinkToThisUrl() + '&instruct=' + UrlEncode(linkInstructions.val()));
           directLinkInput.val(getDirectLinkToThisUrl() + '&instruct=' + UrlEncode(linkInstructions.val()));
         }
       });
@@ -194,46 +194,49 @@ $('#LinkModal').on('show.bs.modal', function (event) {
       </div>`;
       modal.find('.modal-body').html(modalBodyContent);
       const sqlFileInput = modal.find('#sqlFileInput');
-      sqlFileInput.on('change', function() {
-        if(sqlFileInput.val().length > 0) {
+      sqlFileInput.on('change', function () {
+        if (sqlFileInput.val().length > 0) {
           modal.find('.invalid-feedback').hide();
           const file = sqlFileInput[0].files[0];
           let extension = file.name.split(".").pop();
-          if(extension !== 'sql') {
+          if (extension !== 'sql') {
             modal.find('.invalid-feedback').text('Vælg en .sql fil.');
             modal.find('.invalid-feedback').show();
           } else {
             //console.log(file);
             modal.find('.custom-file-label').text(file.name);
-            actionbtn.attr('disabled', false); 
+            actionbtn.attr('disabled', false);
           }
         }
       });
       actionbtn.text('Importer Data');
       actionbtn.on('click', function () {
+        const warn = confirm(' Denne handling vil slette alt i de eksisterende tabeller! Er du sikke på at du vil fortsætte?');
+        if (warn === false) {
+          return false;
+        }
         const file = sqlFileInput[0].files[0];
         let extension = file.name.split(".").pop();
-        if(extension == 'sql') {
-          
+        if (extension == 'sql') {
           const reader = new FileReader();
           reader.readAsText(file);
-          reader.onload = function(e) {
+          reader.onload = function (e) {
             const contents = e.target.result;
             let replacedContent = contents.replace(/&amp;/g, '&');
-            DataObject.clearDatabase(function() {
-              DataObject.zbcImportFromFile(replacedContent, function() {
+            DataObject.clearDatabase(function () {
+              DataObject.zbcImportFromFile(replacedContent, function () {
                 $('#divResultSQL').html("<div style='padding:10px;'>Data er importeret fra filen: " + file.name + "</div>");
-                });
+              });
               DataObject.myDatabase();
-            });                     
+            });
           };
           modal.modal('hide');
-          }
-        });
+        }
+      });
       break;
-      //Download SQL Button
-      case 'export' :
-      
+    //Download SQL Button
+    case 'export':
+
       modal.find('.modal-title').text('Eksporter databasen som en SQL fil');
       modalBodyContent = `<p>Du kan her eksportere databasen som en SQL fil, som du kan indlæse senere:</p>
       <div class="row">
@@ -256,23 +259,23 @@ $('#LinkModal').on('show.bs.modal', function (event) {
             </select>
           </div>
         </div>
-      </div>`; 
+      </div>`;
       modal.find('.modal-body').html(modalBodyContent);
       let exportWhatSelect = modal.find('#exportWhatSelect');
       let exportTableSelect = modal.find('#exportTableSelect');
       // populate the select with the table names
       var tableselectOptions = '';
-      DataObject.getTableNames(function(data) {
+      DataObject.getTableNames(function (data) {
         //console.log(data);
-        for(var i = 0; i < data.length; i++) {
-            tableselectOptions += `<option>${data[i]}</option>`;
-          }
-          exportTableSelect.html(tableselectOptions);
+        for (var i = 0; i < data.length; i++) {
+          tableselectOptions += `<option>${data[i]}</option>`;
+        }
+        exportTableSelect.html(tableselectOptions);
       });
-            
+
       let exportTableSelectGroup = modal.find('#exportTableSelectGroup');
-      exportWhatSelect.on('change', function() {
-        if(exportWhatSelect.val() == 'table') {
+      exportWhatSelect.on('change', function () {
+        if (exportWhatSelect.val() == 'table') {
           exportTableSelectGroup.show();
         } else {
           exportTableSelectGroup.hide();
@@ -284,28 +287,28 @@ $('#LinkModal').on('show.bs.modal', function (event) {
         let config = {
           database: 'zbcSchoolsDemoDatabase',
           linebreaks: true,
-          success: function(sql) {
+          success: function (sql) {
             var filename;
-            if(exportWhatSelect.val() == 'table') {
+            if (exportWhatSelect.val() == 'table') {
               filename = exportTableSelect.val() + '.sql';
             } else {
               filename = 'zbcSchoolsDemoDatabase.sql';
             }
-            var file = new File([sql], filename, {type: "text/plain;charset=utf-8"});
+            var file = new File([sql], filename, { type: "text/plain;charset=utf-8" });
             saveAs(file);
           },
-          error: function(msg) {
+          error: function (msg) {
             alert(msg);
           }
         };
-        if(exportWhatSelect.val() == 'table') {
+        if (exportWhatSelect.val() == 'table') {
           config.table = exportTableSelect.val();
         }
-        websqldump.export(config);        
-        modal.modal('hide');          
+        websqldump.export(config);
+        modal.modal('hide');
       });
       break;
-    }
+  }
 })
 
 //menulinks modalcontent on hidden
