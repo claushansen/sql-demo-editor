@@ -89,6 +89,7 @@ function showInstructions() {
     instructionsModal.find('.modal-title').text('Instruktion');
     instructionsModal.find('.modal-body').text(instructions);
     instructionsModal.find('.modal-body').css('white-space', 'pre-wrap');
+    instructionsModal.find('#modalActionBtn').addClass('d-none');
     instructionsModal.modal('show');
   }
 }
@@ -181,6 +182,22 @@ $('#LinkModal').on('show.bs.modal', function (event) {
       actionbtn.on('click', function () {
         copyToClipboard(directLinkInput.val());
       });
+      break;
+      //Info button
+      case 'info':
+        actionbtn.addClass('d-none');
+        modal.find('.modal-title').text('Om denne side');
+        modalBodyContent = `<div class="d-flex flex-column align-items-center text-center">
+          <img src="https://avatars.githubusercontent.com/u/2194271?v=4" alt="Admin" class="rounded-circle" width="150">
+          <div class="mt-3">
+            <h4>Claus Hansen</h4>
+            <p class="text-secondary mb-1">Full Stack Developer</p>
+            <p class="text-muted font-size-sm">IT Underviser - ZBC</p> 
+            <button class="btn btn-primary">Follow</button> 
+            <button class="btn btn-outline-primary">Message</button>
+          </div>
+        </div>`;
+        modal.find('.modal-body').html(modalBodyContent);
       break;
     //import SQL Button
     case 'import':
@@ -320,5 +337,6 @@ $('#LinkModal').on('hidden.bs.modal', function (e) {
   modal.find('#modalActionBtn').text('');
   modal.find('#modalActionBtn').off();
   modal.find('#modalActionBtn').attr('disabled', false);
+  modal.find('#modalActionBtn').removeClass('d-none');
   // do something...
 })
