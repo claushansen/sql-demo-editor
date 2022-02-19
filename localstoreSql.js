@@ -187,16 +187,55 @@ $('#LinkModal').on('show.bs.modal', function (event) {
       case 'info':
         actionbtn.addClass('d-none');
         modal.find('.modal-title').text('Om denne side');
-        modalBodyContent = `<div class="d-flex flex-column align-items-center text-center">
-          <img src="https://avatars.githubusercontent.com/u/2194271?v=4" alt="Admin" class="rounded-circle" width="150">
-          <div class="mt-3">
-            <h4>Claus Hansen</h4>
-            <p class="text-secondary mb-1">Full Stack Developer</p>
-            <p class="text-muted font-size-sm">IT Underviser - ZBC</p> 
-            <button class="btn btn-primary">Follow</button> 
-            <button class="btn btn-outline-primary">Message</button>
+        modalBodyContent = `
+        <div class="accordion" id="accordionExample">
+            <!-- Accordion card -->
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Hvem står bag siden?
+                  </button>
+                </h2>
+              </div>
+              <!--collapse 1-->
+              <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                <!--profile-->
+                  <div class="d-flex flex-column align-items-center text-center">
+                    <img src="https://avatars.githubusercontent.com/u/2194271?v=4" alt="Admin" class="rounded-circle" width="150">
+                    <div class="mt-3">
+                      <h4>Claus Hansen</h4>
+                      <p class="text-secondary mb-1">Full Stack Developer</p>
+                      <p class="text-muted font-size-sm">IT Underviser - ZBC</p> 
+                      <a href="https://www.linkedin.com/in/webkonsulentclaushansen" target="_blank" class="btn btn-outline-dark btn-circle btn-md"><i class="fa fa-linkedin" aria-hidden="true"></i></a> 
+                      <a href="https://www.youtube.com/channel/UCDAXEl9A53bf9RHMR2___Bw" target="_blank" class="btn btn-outline-dark btn-circle btn-md"><i class="fa fa-youtube" aria-hidden="true"></i></a> 
+                      <a href="https://github.com/claushansen" target="_blank" class="btn btn-outline-dark btn-circle btn-md"><i class="fa fa-github" aria-hidden="true"></i></a> 
+                      <a href="mailto:webkonsulent.claus.hansen@gmail.com" target="_blank" class="btn btn-outline-dark btn-circle btn-md"><i class="fa fa-envelope" aria-hidden="true"></i></a> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Hvad er formålet med siden?
+                </button>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body">
+                <p>Siden er oprettet for at give elever flere muligheder, end W3schools tilbyder, når de skal lære SQL i deres undervisning.</p>
+                <p>Editoren er med vilje stærk inspireret af editoren på w3schools og benytter som standard den samme database opbygning. Derved vil en elev umiddelbart kunne benytte editoren, hvis denne tidligere har fulgt kurset på w3schools.</p>
+                <p>Hvis en underviser ønsker at bruge SQL kurset på W3Schools i kombination med denne side, har jeg udgivet en chrome extension, som eleverne kan installere i Chrome. Derved vil alle henvisninger til W3Schools editor blive redirected til denne side.</p>
+                <a href="https://chrome.google.com/webstore/detail/w3schools-power-sql-edito/mjnpplagjgccnipmlomhpddbagikkocf?hl=da" target="_blank" class="btn btn-outline-dark btn-block btn-md"><i class="fa fa-chrome" aria-hidden="true"></i> Download Chrome Extension</a>
+              </div>
+            </div>
           </div>
-        </div>`;
+        </div>
+        `;
         modal.find('.modal-body').html(modalBodyContent);
       break;
     //import SQL Button
